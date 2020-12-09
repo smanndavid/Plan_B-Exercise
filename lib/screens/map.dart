@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:plan_b_exercise/screens/search.dart';
 import 'package:plan_b_exercise/widgets/InputSearch.dart';
 
@@ -16,6 +17,14 @@ class _MapViewState extends State<MapView> {
       _selectedIndex = index;
     });
   }
+  GoogleMapController mapController;
+
+  final LatLng _center = const LatLng(37.42796133580664, -122.085749655962);
+
+  void _onMapCreated(GoogleMapController controller) {
+    mapController = controller;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,18 +55,16 @@ class _MapViewState extends State<MapView> {
       ),
       body: Stack(
         children: [
-         Positioned(
-           top: 0.0,
-           child: 
-           Container(
-             height: 55,
-             color: Colors.white,
-             alignment: Alignment.centerLeft,
-             width: MediaQuery.of(context).size.width,
-             child: Text("   277 resturants found",))),
+         
+
            Positioned(
-             top: 56,
-             child: mapView(),
+             child: GoogleMap(
+                onMapCreated: _onMapCreated,
+                initialCameraPosition: CameraPosition(
+                  target: _center,
+                  zoom: 4,
+                ),
+              ),
              ),
              Positioned(
                left: 1,
@@ -74,7 +81,23 @@ class _MapViewState extends State<MapView> {
                  ]
                ),
               ),
-             ),),
+             ),
+            ),
+
+            Positioned(
+               left: 1,
+               right: 1,
+               top: 0.0,
+           child: SizedBox(
+             child: Container(
+            height: 50,
+             color: Colors.white,
+             alignment: Alignment.centerLeft,
+             width: MediaQuery.of(context).size.width,
+             child: Text("   277 resturants found",)
+             ),
+           ),
+          ),
         ],
       ),
 
